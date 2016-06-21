@@ -1,6 +1,11 @@
-;; el-indent.el --- `indent-line-function' configurator
+;;; el-indent.el --- `indent-line-function' configurator
 
+;; Version: 0.2.0
 ;; Author:	Mariusz Nowak <medikoo+el-indent@medikoo.com>
+;; Url: https://github.com/mdeikoo/el-indent
+;; Keywords: major-mode indent
+;; Package-Requires: ((emacs "24.0"))
+;;
 ;; Copyright (C) 2010 Mariusz Nowak <medikoo+el-indent@medikoo.com>
 
 ;; This program is free software; you can redistribute it and/or
@@ -17,8 +22,9 @@
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;;
 ;; See README.
+
+;;; Code:
 
 (eval-when-compile
   (require 'cl-lib))
@@ -194,4 +200,5 @@
 	(el-indent-convert-rules (second rules))
 	rules)
 
-(provide 'el-indent/el-indent)
+(provide 'el-indent)
+;;; el-indent.el ends here
