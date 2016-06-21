@@ -11,11 +11,13 @@ mode.
 
 ## Installation
 
-- There is a dependency on [el-kit](https://github.com/medikoo/el-kit), you will need to place the `el-kit` .el files into your `.emacs` `load-path`. (I'd recommend putting them in their own folder.)
-
-- Add `el-indent.el` to you `.emacs` `load-path`
+Add `el-indent.el` to you `.emacs` `load-path`
 
 ## Usage
+
+To use with a major-mode add `(require 'el-indent)`
+
+(NOTE: adding to MELPA soon, so these instructions will change.)
 
 ### How to use ready configurations ?
 

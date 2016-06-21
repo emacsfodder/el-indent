@@ -20,9 +20,35 @@
 ;;
 ;; See README.
 
-(require 'el-kit/regexp nil t)
-(require 'el-kit/list nil t)
+(eval-when-compile
+  (require 'cl-lib))
 
+;;;###autoload
+(defun el-indent-list-replace (list search replace)
+  "In given LIST Replaces all instances of SEARCH with REPLACE."
+	(unless (eq search replace)
+		(let (index)
+			(while (setq index  (el-indent-list-index-of list search))
+				(setf (nth index list) replace))))
+	list)
+
+;;;###autoload
+(defun el-indent-list-index-of (list needle)
+  "Return index of NEEDLE in given LIST."
+	(let ((index -1) (length (length list)) found)
+		(while (and (not found) (< (setq index (+ index 1)) length))
+			(if (eq needle (nth index list))
+					(setq found t)))
+		(if found index)))
+
+;;;###autoload
+(defun el-indent-regexp-group (list)
+  "Return a regexp to match a string in the LIST of strings.
+  Similar to `regexp-opt' with that difference that for each string individual
+  group is created."
+  (concat "\\(" (mapconcat 'identity list "\\)\\|\\(") "\\)"))
+
+;;;###autoload
 (defun el-indent-region (start end)
 	"`indent-region-function' to be used with this tool.
 	Default Emacs `indent-region-function' runs indent function with `point' at
@@ -114,11 +140,11 @@
 	2. Second list are indent magnitues e.g. 1 -1 0 for strings in first list.
 	3. Third list are rules that should be used after presence of string found
 	in first list. If same rules should apply then `t' may be used."
-	(setcar rules (el-kit-regexp-group (car rules)))
+	(setcar rules (el-indent-regexp-group (car rules)))
 	(dolist (x (third rules))
 		(if (and (listp x) (not (eq nil (car x))) (listp (car x)))
 			(el-indent-convert-rules x)))
-	(el-kit-list-replace (third rules) t rules)
+	(el-indent-list-replace (third rules) t rules)
 	rules)
 
 (defun el-indent-calculate-start-rules (rules)
@@ -139,10 +165,10 @@
 						(if (eq rules exp)
 							(nconc start-exps (list t))
 							(nconc start-exps (list (list
-										(copy-list (car exp))
-										(copy-list (second exp))
-										(copy-list (third exp)))))
-							(el-kit-list-replace (third (car (last start-exps))) rules
+										(cl-copy-list (car exp))
+										(cl-copy-list (second exp))
+										(cl-copy-list (third exp)))))
+							(el-indent-list-replace (third (car (last start-exps))) rules
 								start-rules))
 						(nconc start-exps (list exp)))))
 			(setq index (+ index 1)))
